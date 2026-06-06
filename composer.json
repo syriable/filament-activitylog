@@ -1,0 +1,64 @@
+{
+    "name": "syriable/filament-activitylog",
+    "description": "A package to integrate Spatie Activitylog with Filament.",
+    "keywords": [
+        "Syriable",
+        "laravel",
+        "filament-activitylog"
+    ],
+    "homepage": "https://github.com/syriable/filament-activitylog",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Syriable",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "filament/forms": "^4.10|^5.5",
+        "filament/support": "^4.10|^5.5",
+        "illuminate/contracts": "^12.0|^13.0",
+        "spatie/laravel-activitylog": "^5.0",
+        "spatie/laravel-package-tools": "^1.14.0"
+    },
+    "require-dev": {
+        "filament/filament": "^4.0|^5.0",
+        "larastan/larastan": "^3.10",
+        "laravel/pint": "^1.0",
+        "nunomaduro/collision": "^8.0",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^3.0",
+        "phpstan/phpstan": "^2.2",
+        "spatie/laravel-ray": "^1.26"
+    },
+    "autoload": {
+        "psr-4": {
+            "Syriable\\Filament\\Plugins\\Activitylog\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Syriable\\Filament\\Plugins\\Activitylog\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "analyse": "phpstan analyse --memory-limit=512M",
+        "format": "vendor/bin/pint",
+        "test": "vendor/bin/pest"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Syriable\\Filament\\Plugins\\Activitylog\\Providers\\ActivitylogServiceProvider"
+            ]
+        }
+    },
+    "prefer-stable": true
+}

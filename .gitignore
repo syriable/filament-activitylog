@@ -1,0 +1,11 @@
+
+**/.DS_Store
+.idea
+.phpunit.result.cache
+.phpunit.cache
+.vscode
+build
+coverage
+node_modules
+testbench.yaml
+vendor

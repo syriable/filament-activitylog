@@ -1,0 +1,11 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - src
+    level: 8
+    tmpDir: build/phpstan
+    typeAliases:
+        SubjectScopes: 'array<int, string>|string'
+        FilamentColor: 'string|array<int|string, string>'
