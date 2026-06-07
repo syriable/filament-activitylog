@@ -9,7 +9,7 @@ use Syriable\Filament\Plugins\Activitylog\Services\ActivitylogGroupService;
 
 trait SupportsActivityGroups
 {
-    protected static ?bool $activityGroupsSupported = null;
+    protected bool | Closure $activityGroupsSupported = true;
 
     protected bool | Closure $areGroupActivitiesVisible = true;
 
@@ -21,16 +21,14 @@ trait SupportsActivityGroups
 
     public function supportsActivityGroups(): bool
     {
-        if (static::$activityGroupsSupported !== null) {
-            return static::$activityGroupsSupported;
-        }
-
-        return true;
+        return (bool) $this->evaluate($this->activityGroupsSupported);
     }
 
-    public static function activityGroups(?bool $enabled = null): void
+    public function activityGroups(bool | Closure $enabled = true): static
     {
-        static::$activityGroupsSupported = $enabled;
+        $this->activityGroupsSupported = $enabled;
+
+        return $this;
     }
 
     public function groups(bool | Closure $visible = true): static

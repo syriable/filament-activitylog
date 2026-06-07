@@ -47,13 +47,13 @@ trait DefinesEntryActions
     /**
      * @return array<array-key, Actions\Action>
      */
-    public function getItemActions(ActivityModel $activity)
+    public function getItemActions(ActivityModel $activity): array
     {
         /** @phpstan-var array<array-key, Actions\Action> $actions */
         $actions = $this->resolveScopedValue($activity, $this->itemActions, $activity->event) ?? [];
 
         return array_map(
-            callback: fn (Actions\Action $action): Actions\Action => $action(['activity_id' => $activity->getKey()]),
+            callback: fn (Actions\Action $action): Actions\Action => (clone $action)(['activity_id' => $activity->getKey()]),
             array: $actions
         );
     }

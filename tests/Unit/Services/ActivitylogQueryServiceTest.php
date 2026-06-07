@@ -123,8 +123,6 @@ it('limits the number of resolved activities', function () {
 });
 
 it('does not deduplicate grouped activities when groups are disabled', function () {
-    ActivitylogTimeline::activityGroups(false);
-
     $post = Post::create([
         'title' => 'Grouped post',
     ]);
@@ -149,11 +147,11 @@ it('does not deduplicate grouped activities when groups are disabled', function 
         'properties' => [ActivityBatch::PROPERTY_KEY => $groupKey],
     ]);
 
-    $timeline = ActivitylogTimeline::make();
+    $timeline = ActivitylogTimeline::make()
+        ->activityGroups(false);
+
     $activities = app(ActivitylogQueryService::class)->resolveForRecord($timeline, $post);
 
     expect($activities)
         ->toHaveCount(2);
-
-    ActivitylogTimeline::activityGroups(null);
 });

@@ -16,6 +16,7 @@
     ],
     "require": {
         "php": "^8.4",
+        "filament/filament": "^4.10|^5.5",
         "filament/forms": "^4.10|^5.5",
         "filament/support": "^4.10|^5.5",
         "illuminate/contracts": "^12.0|^13.0",
@@ -23,7 +24,6 @@
         "spatie/laravel-package-tools": "^1.14.0"
     },
     "require-dev": {
-        "filament/filament": "^4.0|^5.0",
         "larastan/larastan": "^3.10",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^8.0",

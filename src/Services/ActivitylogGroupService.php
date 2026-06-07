@@ -16,9 +16,6 @@ use Syriable\Filament\Plugins\Activitylog\Support\ActivityBatch;
 class ActivitylogGroupService
 {
     /**
-     * @return EloquentCollection<int, ActivityModel>
-     */
-    /**
      * @param  EloquentCollection<int, ActivityModel>  $activities
      * @return EloquentCollection<int, ActivityModel>
      */
@@ -77,9 +74,6 @@ class ActivitylogGroupService
         return $groupActivities;
     }
 
-    /**
-     * @return Collection<string, EloquentCollection<int, ActivityModel>>
-     */
     /**
      * @param  EloquentCollection<int, ActivityModel>  $activities
      * @return Collection<string, EloquentCollection<int, ActivityModel>>
@@ -175,7 +169,7 @@ class ActivitylogGroupService
             $query = ActivityBatch::scopeForBatch($activityModelClass::query(), $groupKey)
                 ->with(['subject', 'causer'])
                 ->whereHas('subject')
-                ->where('id', '!=', $activity->id);
+                ->where('id', '!=', $activity->getKey());
 
             if ($modifyGroupActivitiesQueryCallback = $component->getModifyGroupActivitiesQueryCallback()) {
                 $query = $component->evaluate(
@@ -196,7 +190,6 @@ class ActivitylogGroupService
             return $query->get();
         };
 
-        /** @var EloquentCollection<int, ActivityModel> $groupActivities */
         $groupActivities = $component->evaluate(
             value: $callback,
             namedInjections: [
@@ -209,6 +202,11 @@ class ActivitylogGroupService
             ],
         );
 
+        if (! $groupActivities instanceof EloquentCollection) {
+            return new EloquentCollection([$activity]);
+        }
+
+        /** @var EloquentCollection<int, ActivityModel> $groupActivities */
         if ($groupActivities->contains($activity)) {
             $groupActivities = $groupActivities->reject(
                 fn (ActivityModel $groupActivity): bool => $groupActivity->is($activity),

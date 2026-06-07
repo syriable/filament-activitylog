@@ -38,7 +38,7 @@ class ActivitylogAttributePresenter implements ActivitylogAttributePresenterCont
             }
 
             /** @var Model $model */
-            $model = $subjectPrototype->setRawAttributes([
+            $model = (clone $subjectPrototype)->setRawAttributes([
                 ...($context->activity->attribute_changes?->get($rawAttributePropertyKey, []) ?? []),
                 $key => $value,
             ]);

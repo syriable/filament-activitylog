@@ -21,9 +21,4 @@ enum LoggedEventKind: string
 
         return self::tryFrom($event);
     }
-
-    public function isStandard(): bool
-    {
-        return true;
-    }
 }

@@ -51,13 +51,7 @@ class ActivityBatch
 
         $activityModelClass::query()
             ->where('id', '>', $maxIdBefore)
-            ->get()
-            ->each(function (ActivityModel $activity) use ($groupId): void {
-                $properties = $activity->properties?->toArray() ?? [];
-                $properties[self::PROPERTY_KEY] = $groupId;
-
-                $activity->update(['properties' => $properties]);
-            });
+            ->update(['properties->' . self::PROPERTY_KEY => $groupId]);
 
         return $result;
     }

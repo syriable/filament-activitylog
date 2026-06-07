@@ -43,6 +43,34 @@ it('preloads group activities grouped by group key', function () {
         ->toBe([$activityA->getKey(), $activityB->getKey()]);
 });
 
+it('resolves group activities when a custom callback returns a non-eloquent collection', function () {
+    $post = Post::create([
+        'title' => 'Batch post',
+    ]);
+
+    $groupKey = (string) str()->uuid();
+
+    $activity = Activity::create([
+        'log_name' => 'default',
+        'description' => 'created',
+        'event' => 'created',
+        'subject_type' => Post::class,
+        'subject_id' => $post->getKey(),
+        'properties' => [ActivityBatch::PROPERTY_KEY => $groupKey],
+    ]);
+
+    $timeline = ActivitylogTimeline::make()
+        ->getGroupActivitiesUsing(fn (): array => []);
+
+    $groupActivities = app(ActivitylogGroupService::class)->resolveGroupActivities($timeline, $activity, $groupKey);
+
+    expect($groupActivities)
+        ->toHaveCount(1);
+
+    expect($groupActivities->first()->getKey())
+        ->toBe($activity->getKey());
+});
+
 it('resolves nested group activities for a timeline entry', function () {
     $post = Post::create([
         'title' => 'Batch post',
