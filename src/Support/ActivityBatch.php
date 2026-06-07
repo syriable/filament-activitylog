@@ -38,16 +38,23 @@ class ActivityBatch
      *
      * Replaces the removed v4 `LogBatch::withinBatch()` / `startBatch()` API.
      *
-     * Only activities created during the callback are tagged. Intended for single-process
+     * Activities logged in `$afterBatch` are tagged into the same group too; it
+     * receives the callback result and the group id.
+     *
+     * Only activities created during the callbacks are tagged. Intended for single-process
      * use; for queued jobs prefer assigning `ActivityBatch::PROPERTY_KEY` explicitly.
      */
-    public static function withinBatch(Closure $callback): mixed
+    public static function withinBatch(Closure $callback, ?Closure $afterBatch = null): mixed
     {
         $groupId = (string) Str::uuid();
         $activityModelClass = config('activitylog.activity_model', ActivityModel::class);
         $maxIdBefore = (int) $activityModelClass::query()->max('id');
 
         $result = $callback();
+
+        if ($afterBatch) {
+            $afterBatch($result, $groupId);
+        }
 
         $activityModelClass::query()
             ->where('id', '>', $maxIdBefore)

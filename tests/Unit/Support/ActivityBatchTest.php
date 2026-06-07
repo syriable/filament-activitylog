@@ -76,3 +76,42 @@ it('groups activities logged inside withinBatch', function () {
     expect(ActivityBatch::scopeForBatch(Activity::query(), $groupKey)->count())
         ->toBe(2);
 });
+
+it('tags afterBatch activities into the same group and passes the result and group id', function () {
+    $post = Post::create(['title' => 'Grouped post']);
+
+    $passedResult = null;
+    $passedGroupId = null;
+
+    $result = ActivityBatch::withinBatch(
+        function () use ($post): string {
+            activity()
+                ->performedOn($post)
+                ->event('created')
+                ->log('created');
+
+            return 'pipeline-result';
+        },
+        function (mixed $result, string $groupId) use ($post, &$passedResult, &$passedGroupId): void {
+            $passedResult = $result;
+            $passedGroupId = $groupId;
+
+            activity()
+                ->performedOn($post)
+                ->event('onboarding:completed')
+                ->log('completed onboarding');
+        },
+    );
+
+    expect($result)
+        ->toBe('pipeline-result');
+
+    expect($passedResult)
+        ->toBe('pipeline-result');
+
+    expect(Activity::query()->count())
+        ->toBe(2);
+
+    expect(ActivityBatch::scopeForBatch(Activity::query(), $passedGroupId)->count())
+        ->toBe(2);
+});
