@@ -39,15 +39,20 @@ class ActivitylogChangesSummaryAssembler implements ActivitylogChangesSummaryAss
             method_exists($subjectPrototype, 'getDeletedAtColumn') ? $subjectPrototype->getDeletedAtColumn() : null,
         ] : [];
 
-        $updatedAttributes = $attributes
-            ->filter(function (mixed $value, string $key) use ($context, $oldAttributes): bool {
-                return $this->attributeFormatter->format($context, $oldAttributes->get($key), $key, 'old')
-                    !== $this->attributeFormatter->format($context, $value, $key);
-            })
-            ->reject(fn (mixed $value, string $key): bool => $context->subjectClass ? in_array($key, $timestampColumns) : false);
+        $formattedAttributes = $attributes
+            ->map(function (mixed $value, string $key) use ($context, $oldAttributes): array {
+                return [
+                    'new' => $this->attributeFormatter->format($context, $value, $key),
+                    'old' => $this->attributeFormatter->format($context, $oldAttributes->get($key), $key, 'old'),
+                ];
+            });
+
+        $updatedAttributes = $formattedAttributes
+            ->filter(fn (array $formatted): bool => $formatted['old'] !== $formatted['new'])
+            ->reject(fn (array $formatted, string $key): bool => $context->subjectClass ? in_array($key, $timestampColumns) : false);
 
         return $updatedAttributes
-            ->map(function (mixed $value, string $key) use ($context, $oldAttributes): string {
+            ->map(function (array $formatted, string $key) use ($context): string {
                 $attributeLabel = $this->attributeLabelResolver->resolve($context, $key);
 
                 $isChangesSummaryAttributeValuesVisible = $context->component->isChangesSummaryAttributeValuesVisible($key);
@@ -58,8 +63,8 @@ class ActivitylogChangesSummaryAssembler implements ActivitylogChangesSummaryAss
 
                 $isChangesSummaryOldAttributeValuesVisible = $context->component->isChangesSummaryAttributeOldValuesVisible($key);
 
-                $attributeValue = $this->attributeFormatter->format($context, $value, $key);
-                $oldAttributeValue = $this->attributeFormatter->format($context, $oldAttributes->get($key), $key, 'old');
+                $attributeValue = $formatted['new'];
+                $oldAttributeValue = $formatted['old'];
 
                 if (blank($attributeValue)) {
                     if (blank($oldAttributeValue)) {

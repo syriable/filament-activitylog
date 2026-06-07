@@ -69,9 +69,11 @@
                 @php
                     $nextItem = $timelineEntries->get($loop->index + 1);
                     $nextItemIcon = $nextItem?->getIcon($isCompact);
-                
+
+                    $parentItemIcon = $parentTimelineEntry?->getIcon();
+
                     $icon = $timelineEntry->getIcon($isCompact);
-                    
+
                     if ($parentTimelineEntry && $parentTimelineEntry->activity->is($timelineEntry->activity) && $icon) {
                         $icon = null;
                     }
@@ -113,15 +115,15 @@
                                     'w-6 left-[3.6px] ' => ! $isCompact,
                                     'top-5' => ! $icon && ! $isCompact,
                                     'top-8' => $icon && ! $isCompact,
-                                    'bottom-0.5' => $icon && ! $nextItem->getIcon() && ! $isCompact,
-                                    'bottom-0' => ! $icon && ! $nextItem->getIcon() && ! $isCompact,
-                                    'bottom-2.5'  => $nextItem->getIcon() && ! $isCompact,
+                                    'bottom-0.5' => $icon && ! $nextItemIcon && ! $isCompact,
+                                    'bottom-0' => ! $icon && ! $nextItemIcon && ! $isCompact,
+                                    'bottom-2.5'  => $nextItemIcon && ! $isCompact,
                                     'w-4 left-[4px] ' => $isCompact,
                                     ' top-4' => ! $icon && $isCompact,
                                     ' top-6' => $icon && $isCompact,
-                                    ' bottom-0.5' => $icon && ! $nextItem->getIcon() && $isCompact,
-                                    ' -bottom-1 ' => ! $icon && ! $nextItem->getIcon() && $isCompact,
-                                    ' bottom-3' => $nextItem->getIcon() && $isCompact,
+                                    ' bottom-0.5' => $icon && ! $nextItemIcon && $isCompact,
+                                    ' -bottom-1 ' => ! $icon && ! $nextItemIcon && $isCompact,
+                                    ' bottom-3' => $nextItemIcon && $isCompact,
                                 ])
                                 x-show="search === '' && (! isCollapsible || expanded || {{ $loop->index }} < collapsedVisibleCount - 1)"
                             >
@@ -133,9 +135,9 @@
                             <div
                                 @class([
                                     'h-px absolute bg-gray-300/70 dark:bg-gray-600/70',
-                                    'h-px w-[35px] top-[9px] left-[-31px]' => ! $parentTimelineEntry->getIcon(),
-                                    'h-px w-[24px] top-[9.5px] -left-5' => $parentTimelineEntry->getIcon() && ! $isCompact,
-                                    'h-px w-[28px] top-[7.6px] -left-[22.5px]' => $parentTimelineEntry->getIcon() && $isCompact,
+                                    'h-px w-[35px] top-[9px] left-[-31px]' => ! $parentItemIcon,
+                                    'h-px w-[24px] top-[9.5px] -left-5' => $parentItemIcon && ! $isCompact,
+                                    'h-px w-[28px] top-[7.6px] -left-[22.5px]' => $parentItemIcon && $isCompact,
                                 ])
                             ></div>
                         @endif
