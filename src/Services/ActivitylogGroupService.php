@@ -210,7 +210,6 @@ class ActivitylogGroupService
         }
 
         /** @var EloquentCollection<int, ActivityModel> $groupActivities */
-
         if ($groupActivities->contains($activity)) {
             $groupActivities = $groupActivities->reject(
                 fn (ActivityModel $groupActivity): bool => $groupActivity->is($activity),
