@@ -17,6 +17,11 @@ use Syriable\Filament\Plugins\Activitylog\Filament\Infolists\Components\Activity
 
 class ActivitylogRecordPresenter implements ActivitylogRecordPresenterContract
 {
+    /**
+     * @var array<string, string>
+     */
+    protected array $panelModelLabels = [];
+
     public function resolveTitle(ActivitylogEntryContext $context): ?string
     {
         if (! $context->subject) {
@@ -92,13 +97,27 @@ class ActivitylogRecordPresenter implements ActivitylogRecordPresenterContract
             return $modelLabel;
         }
 
+        return $this->resolvePanelModelLabel($modelClass);
+    }
+
+    /**
+     * @param  class-string<Model>  $modelClass
+     */
+    protected function resolvePanelModelLabel(string $modelClass): string
+    {
+        $panel = class_exists(\Filament\Facades\Filament::class) && app()->bound('filament')
+            ? \Filament\Facades\Filament::getCurrentPanel()
+            : null;
+
+        $cacheKey = ($panel?->getId() ?? 'none') . '|' . $modelClass;
+
+        if (array_key_exists($cacheKey, $this->panelModelLabels)) {
+            return $this->panelModelLabels[$cacheKey];
+        }
+
         $modelLabel = null;
 
-        if (
-            class_exists(\Filament\Facades\Filament::class)
-            && app()->bound('filament')
-            && ($panel = \Filament\Facades\Filament::getCurrentPanel())
-        ) {
+        if ($panel) {
             $modelResource = $panel->getModelResource($modelClass);
 
             if ($modelResource) {
@@ -108,7 +127,7 @@ class ActivitylogRecordPresenter implements ActivitylogRecordPresenterContract
 
         $modelLabel ??= \Filament\Support\get_model_label($modelClass);
 
-        return str($modelLabel)->lower()->toString();
+        return $this->panelModelLabels[$cacheKey] = str($modelLabel)->lower()->toString();
     }
 
     public function resolveRelationshipName(ActivitylogEntryContext $context): ?string

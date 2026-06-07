@@ -31,13 +31,15 @@ class ActivitylogQueryService implements ActivitylogQueryContract
             $activities = $this->queryActivitiesForRecord($component, $record);
         }
 
-        if ($component->supportsActivityGroups() && $component->isGroupInline()) {
+        $supportsActivityGroups = $component->supportsActivityGroups();
+
+        if ($supportsActivityGroups && $component->isGroupInline()) {
             $activities = $activities->merge(
                 $this->groupService->resolveInlineGroupActivities($component, $activities),
             );
         }
 
-        if ($component->supportsActivityGroups() && $component->hasCustomGetActivitiesCallback()) {
+        if ($supportsActivityGroups && $component->hasCustomGetActivitiesCallback()) {
             $activities = $this->deduplicateGroupedActivities($activities);
         }
 
