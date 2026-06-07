@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.1.1 - 2026-06-07
+
+### What's Changed
+
+* feat: optional afterBatch callback in ActivityBatch::withinBatch by @alkhatibsy in https://github.com/syriable/filament-activitylog/pull/4
+
+**Full Changelog**: https://github.com/syriable/filament-activitylog/compare/0.1.0...0.1.1
+
 ## 0.1.0 - 2026-06-06
 
 Initial release of `syriable/filament-activitylog` — a Filament plugin that renders Spatie Activitylog entries as a searchable, configurable timeline.
@@ -64,8 +72,8 @@ Initial release of `syriable/filament-activitylog` — a Filament plugin that re
 
 ```bash
 composer require syriable/filament-activitylog
-```
 
+```
 Register the plugin on your Filament panel:
 
 ```php
@@ -73,8 +81,8 @@ use Syriable\Filament\Plugins\Activitylog\Activitylog;
 
 $panel
     ->plugin(Activitylog::make());
-```
 
+```
 Add the timeline to a resource infolist or action:
 
 ```php
@@ -84,6 +92,6 @@ use Syriable\Filament\Plugins\Activitylog\Filament\Infolists\Components\Activity
 ActivitylogTimeline::make()
 
 ActivitylogTimelineAction::make()
-```
 
+```
 Internal classes are marked `@internal` and are not part of the supported public API.
