@@ -40,12 +40,12 @@ trait DefinesEmptyState
         return $this->evaluate($this->emptyStateIcon);
     }
 
-    public function getEmptyStateHeading(): ?string
+    public function getEmptyStateHeading(): string | Htmlable | null
     {
         return $this->evaluate($this->emptyStateHeading);
     }
 
-    public function getEmptyStateDescription(): ?string
+    public function getEmptyStateDescription(): string | Htmlable | null
     {
         return $this->evaluate($this->emptyStateDescription);
     }

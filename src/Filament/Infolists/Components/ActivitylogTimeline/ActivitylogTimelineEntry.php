@@ -136,7 +136,7 @@ class ActivitylogTimelineEntry
     {
         $format = $this->getDateTimeFormat();
 
-        $dateTime = $this->getDateTime();
+        $dateTime = $this->getDateTime()->copy();
 
         if ($timezone = $this->getDateTimeTimezone()) {
             $dateTime->setTimezone($timezone);
@@ -179,7 +179,7 @@ class ActivitylogTimelineEntry
     /**
      * @return array<int|string, Action>
      */
-    public function getActions()
+    public function getActions(): array
     {
         return $this->component->getItemActions($this->activity);
     }

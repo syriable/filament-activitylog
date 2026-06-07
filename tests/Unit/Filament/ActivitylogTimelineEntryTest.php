@@ -47,6 +47,45 @@ it('returns nested group timeline data when group activities exist', function ()
         ->toHaveCount(2);
 });
 
+it('does not mutate the underlying created_at when formatting with a timezone', function () {
+    $post = Post::create([
+        'title' => 'Timezone post',
+    ]);
+
+    $activity = Activity::create([
+        'log_name' => 'default',
+        'description' => 'created',
+        'event' => 'created',
+        'subject_type' => Post::class,
+        'subject_id' => $post->getKey(),
+    ]);
+
+    $timeline = ActivitylogTimeline::make()
+        ->itemDateTimeTimezone('Asia/Tokyo');
+
+    $timelineEntry = new ActivitylogTimelineEntry($activity, $timeline);
+
+    $timezoneBefore = $timelineEntry->getDateTime()->getTimezone()->getName();
+
+    $timelineEntry->getDateTimeFormatted();
+
+    expect($timelineEntry->getDateTime()->getTimezone()->getName())
+        ->toBe($timezoneBefore);
+});
+
+it('keeps activity group support per instance', function () {
+    $disabledTimeline = ActivitylogTimeline::make()
+        ->activityGroups(false);
+
+    $enabledTimeline = ActivitylogTimeline::make();
+
+    expect($disabledTimeline->supportsActivityGroups())
+        ->toBeFalse();
+
+    expect($enabledTimeline->supportsActivityGroups())
+        ->toBeTrue();
+});
+
 it('returns null group timeline data for inline groups', function () {
     $post = Post::create([
         'title' => 'Batch post',
