@@ -16,9 +16,6 @@ use Syriable\Filament\Plugins\Activitylog\Support\ActivityBatch;
 class ActivitylogGroupService
 {
     /**
-     * @return EloquentCollection<int, ActivityModel>
-     */
-    /**
      * @param  EloquentCollection<int, ActivityModel>  $activities
      * @return EloquentCollection<int, ActivityModel>
      */
