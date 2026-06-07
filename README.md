@@ -20,7 +20,6 @@ Easily add beautiful timelines to your Filament apps — inside panels or stand-
   - [Custom events](#custom-events)
   - [Timeline](#timeline)
   - [Timeline action](#timeline-action)
-- [Configuration reference](#configuration-reference)
 - [Translations](#translations)
 - [Troubleshooting](#troubleshooting)
 - [Testing](#testing)
@@ -85,7 +84,7 @@ $panel
 ### Publish translations (optional)
 
 ```bash
-php artisan vendor:publish --tag="fi-sy-activitylog-translations"
+php artisan vendor:publish --tag="filament-activitylog-translations"
 ```
 
 ## Usage
@@ -636,16 +635,6 @@ ActivitylogTimelineAction::make()
     })
 ```
 
-## Configuration reference
-
-| Kind | Primary | Alias |
-|------|---------|-------|
-| PHP namespace | `Syriable\Filament\Plugins\Activitylog` | — |
-| Plugin ID | `syriable/filament-activitylog` | — |
-| Translations | `fi-sy-activitylog::` | `filament-activitylog::` |
-| Blade components | `<x-fi-sy-activitylog::timeline>` | `<x-filament-activitylog::timeline>` |
-| CSS classes | `fi-sy-*` | — |
-
 ## Translations
 
 Built-in languages: English, French, Italian, Dutch.
@@ -653,7 +642,7 @@ Built-in languages: English, French, Italian, Dutch.
 Publish and customize:
 
 ```bash
-php artisan vendor:publish --tag="fi-sy-activitylog-translations"
+php artisan vendor:publish --tag="filament-activitylog-translations"
 ```
 
 ## Troubleshooting
